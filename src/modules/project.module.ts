@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, HttpModule, RequestMethod } from "@nestjs/c
 import { MongooseModule } from "@nestjs/mongoose";
 import { ExampleController } from "controllers/example.controller";
 import { ExampleService } from "services/example.service";
-import { ExampleSchema } from "schemas/example.schema";
+//import { ExampleSchema } from "schemas/example.schema";
 import { Schemas } from "constants/schemas";
 import { HttpExceptionFilter } from "filters/exception.filter";
 import { APP_FILTER } from "@nestjs/core";
@@ -13,10 +13,6 @@ import { AuthenticationMiddleware } from "middleware/authentication.middleware";
 @Module({
     imports: [
         HttpModule,
-        MongooseModule.forFeature([
-            /*Fill in Schemas here */
-            { name: Schemas.exampleSchema, schema: ExampleSchema },
-        ]),
     ],
     controllers: [
         /*Fill controllers here */

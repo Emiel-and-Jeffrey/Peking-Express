@@ -5,7 +5,7 @@ import { Schemas } from "constants/schemas";
 // import { IExampleModel } from "schemas/example.schema";
 
 @Injectable()
-export class ExampleService
+export class PeekingService
 {
     constructor(
         // @InjectModel(Schemas.exampleSchema)

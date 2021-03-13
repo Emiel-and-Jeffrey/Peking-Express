@@ -1,8 +1,8 @@
 import { MiddlewareConsumer, Module, HttpModule, RequestMethod } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
-import { ExampleController } from "controllers/example.controller";
-import { ExampleService } from "services/example.service";
-//import { ExampleSchema } from "schemas/example.schema";
+import { PeekingController } from "controllers/peeking.controller";
+import { PeekingService } from "services/peeking.service";
+//  import { ExampleSchema } from "schemas/example.schema";
 import { Schemas } from "constants/schemas";
 import { HttpExceptionFilter } from "filters/exception.filter";
 import { APP_FILTER } from "@nestjs/core";
@@ -16,11 +16,11 @@ import { AuthenticationMiddleware } from "middleware/authentication.middleware";
     ],
     controllers: [
         /*Fill controllers here */
-        ExampleController,
+        PeekingController,
     ],
     providers: [
         /* Fill services here */
-        ExampleService,
+        PeekingService,
         {
             provide: APP_FILTER,
             useClass: HttpExceptionFilter,

@@ -5,11 +5,19 @@ import { CorsOptions } from "@nestjs/common/interfaces/external/cors-options.int
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "app.module";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { BadRequestException, ValidationError, ValidationPipe } from "@nestjs/common";
 
 async function Initialize(): Promise<void>
 {
     const cors = getCorsOptions();
     const app = await NestFactory.create(AppModule, { cors });
+    app.useGlobalPipes(
+      new ValidationPipe({
+          exceptionFactory: (validationErrors: ValidationError[] = []) => {
+              return new BadRequestException(validationErrors);
+          },
+      })
+    );
 
     const options = new DocumentBuilder()
         .setTitle("API")

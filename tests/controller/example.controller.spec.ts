@@ -1,21 +1,21 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { ExampleController } from "../../src/controllers/example.controller";
-import { ExampleService } from "../../src/services/example.service";
+import { PeekingController } from "../../src/controllers/peeking.controller";
+import { PeekingService } from "../../src/services/peeking.service";
 
 
 describe("Downloadable Content Controller", () =>
 {
-    let controller: ExampleController;
-    let service: ExampleService;
+    let controller: PeekingController;
+    let service: PeekingService;
 
 
     beforeEach(async () =>
     {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [ExampleController],
+            controllers: [PeekingController],
             providers: [
                 {
-                    provide: ExampleService,
+                    provide: PeekingService,
                     useValue: {
                         test: jest.fn(),
                     },
@@ -23,8 +23,8 @@ describe("Downloadable Content Controller", () =>
             ],
         }).compile();
 
-        controller = module.get<ExampleController>(ExampleController);
-        service = module.get<ExampleService>(ExampleService);
+        controller = module.get<PeekingController>(PeekingController);
+        service = module.get<PeekingService>(PeekingService);
     });
 
     it("Test: basic test", async () =>

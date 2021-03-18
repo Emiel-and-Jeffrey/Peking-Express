@@ -16,7 +16,7 @@ export class GameMap
       for (let i: number = 1; i <= mapRequest.locations.number; i++)
       {
          const ID = i === mapRequest.locations.number ? maxNodes : i;
-         this.graph.addNode({
+         this.graph.AddNode({
             ID: ID,
             isCritical: mapRequest.locations.critical.includes(ID)
          });
@@ -24,10 +24,10 @@ export class GameMap
 
       for (let i: number = 0; i < mapRequest.connections.price.length; i++)
       {
-         this.graph.addEdge({
+         this.graph.AddEdge({
             weight: mapRequest.connections.price[i],
-            startNode: this.graph.getNode(mapRequest.connections.source[i]),
-            endNode: this.graph.getNode(mapRequest.connections.target[i])
+            startNode: this.graph.GetNode(mapRequest.connections.source[i]),
+            endNode: this.graph.GetNode(mapRequest.connections.target[i])
          });
       }
    }
@@ -40,6 +40,30 @@ export class GameMap
    public AddGroup(group: Group): void
    {
       this.groups.push(group);
+   }
+
+   private GetGroup(id: number): Group
+   {
+      for (const group of this.groups)
+      {
+         if (group.ID === id)
+         {
+            return group;
+         }
+      }
+      return undefined;
+   }
+
+   public MoveGroup(id: number, nodeID: number): void
+   {
+      let group: Group = this.GetGroup(id);
+      if (group === undefined)
+      {
+         group = {ID: id, currentNode: undefined};
+         this.groups.push(group);
+      }
+
+      group.currentNode = this.graph.GetNode(nodeID);
    }
 
    public SetPlayer(group: Group): void

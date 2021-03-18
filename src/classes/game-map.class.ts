@@ -7,6 +7,10 @@ export class GameMap
    private readonly groups: Group[];
    private player: Group;
 
+   /**
+    * Initalize the map based on map request
+    * @param mapRequest the map you want this to be modeled after
+    */
    public constructor(mapRequest: IMapRequest)
    {
       const maxNodes = 88;
@@ -32,16 +36,28 @@ export class GameMap
       }
    }
 
+   /**
+    * Get the graph for this map
+    */
    public  GetGraph(): Graph
    {
      return this.graph;
    }
 
+   /**
+    * Add a group to the map
+    * @param group the group you want to add
+    */
    public AddGroup(group: Group): void
    {
       this.groups.push(group);
    }
 
+   /**
+    * Get a specific group by id. If not found undefined will be returned.
+    * @param id the group ID
+    * @private
+    */
    private GetGroup(id: number): Group
    {
       for (const group of this.groups)
@@ -54,6 +70,11 @@ export class GameMap
       return undefined;
    }
 
+   /**
+    * Move a group to a location. If the group was not added this will be done for you.
+    * @param id the group ID
+    * @param nodeID the node ID
+    */
    public MoveGroup(id: number, nodeID: number): void
    {
       let group: Group = this.GetGroup(id);
@@ -66,16 +87,27 @@ export class GameMap
       group.currentNode = this.graph.GetNode(nodeID);
    }
 
+   /**
+    * Set the player on the map
+    * @param group the player
+    */
    public SetPlayer(group: Group): void
    {
       this.player = group;
    }
 
+   /**
+    * Get the player
+    */
    public GetPlayer(): Group
    {
       return this.player;
    }
 
+   /**
+    * Check if a group is on a specific node
+    * @param node the node you want to check
+    */
    public IsGroupOnNode(node: GraphNode): boolean
    {
       for (const group of this.groups)

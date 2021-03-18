@@ -27,11 +27,11 @@ describe("Game Map", () =>
 
     it("Constructor: Initialize Map Check Nodes", async () =>
     {
-        expect(graph.getNode(1)).toEqual( { ID: 1, isCritical: false});
-        expect(graph.getNode(2)).toEqual( { ID: 2, isCritical: false});
-        expect(graph.getNode(3)).toEqual( { ID: 3, isCritical: true});
-        expect(graph.getNode(88)).toEqual( { ID: 88, isCritical: false});
-        expect(graph.getNode(4)).toEqual( undefined);
+        expect(graph.GetNode(1)).toEqual( { ID: 1, isCritical: false});
+        expect(graph.GetNode(2)).toEqual( { ID: 2, isCritical: false});
+        expect(graph.GetNode(3)).toEqual( { ID: 3, isCritical: true});
+        expect(graph.GetNode(88)).toEqual( { ID: 88, isCritical: false});
+        expect(graph.GetNode(4)).toEqual( undefined);
     });
 
     it("Constructor: Initialize Map Check Edges", async () =>
@@ -62,15 +62,15 @@ describe("Game Map", () =>
 
     it("AddGroup: CheckIfGroupWasAdded", () =>
     {
-        const node = graph.getNode(1);
+        const node = graph.GetNode(1);
         map.AddGroup({ID: 0, currentNode: node});
         expect(map.IsGroupOnNode(node)).toBe(true);
-        expect(map.IsGroupOnNode(graph.getNode(22))).toBe(false);
+        expect(map.IsGroupOnNode(graph.GetNode(22))).toBe(false);
     });
 
     it("SetPlayer: Set player and Get Player", () =>
     {
-        const node = graph.getNode(1);
+        const node = graph.GetNode(1);
         const player = {ID: 0, currentNode: node};
         map.SetPlayer(player);
         expect(map.GetPlayer()).toBe(player);

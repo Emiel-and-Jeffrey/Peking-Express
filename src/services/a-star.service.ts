@@ -2,8 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { GraphNode } from "../interfaces";
 import { Edge } from "../interfaces";
 import { GameMap } from "../classes/game-map.class";
-import { Graph } from "../classes/graph.class";
-import PriorityQueue from "ts-priority-queue/src/PriorityQueue";
 
 interface AStarChoice
 {
@@ -18,10 +16,21 @@ interface AStarChoice
 @Injectable()
 export class AStarService
 {
-  public GetPath(map: GameMap, startNode: GraphNode, endNode: GraphNode, budget: number): Edge[] {
+  /**
+   * Get the path from a start node to a specific end node
+   * @param map the map to walk trough
+   * @param startNode the start node
+   * @param endNode the end node
+   * @param budget the maximum you want to spend
+   */
+  public GetPath(map: GameMap, startNode: GraphNode, endNode: GraphNode, budget: number): Edge[]
+  {
+    if (!map || !startNode || !endNode)
+      return [];
 
     const graph = map.GetGraph();
     const openSet: AStarChoice[] = [AStarService.CreateAStarChoice(0, 0, startNode, undefined)];
+    const closedSet: GraphNode[] = [];
 
     while (openSet.length > 0)
     {
@@ -31,16 +40,21 @@ export class AStarService
       {
           return AStarService.GeneratePath(choice);
       }
+      closedSet.push(choice.node);
 
       for (const edge of graph.GetEdges(choice.node.ID))
       {
+          if ((edge.endNode.isCritical === true && map.IsGroupOnNode(edge.endNode)) || closedSet.includes(edge.endNode))
+          {
+            continue;
+          }
+
           let neighbor = AStarService.FindChoice(openSet, edge.endNode);
           if (neighbor === undefined)
           {
             neighbor =  AStarService.CreateAStarChoice(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, edge.endNode, undefined);
             openSet.push(neighbor);
           }
-
 
           const neighborScore = edge.weight + choice.fScore;
           if (neighbor.fScore > edge.weight + choice.fScore && neighborScore < budget)
@@ -59,11 +73,25 @@ export class AStarService
     return [];
   }
 
+  /***
+   * Create a AStarChoice instance
+   * @param gScore the weight
+   * @param hScore the h score
+   * @param node the node that you are
+   * @param parent the parent node that you had
+   * @private
+   */
   private static CreateAStarChoice(gScore: number, hScore: number, node: GraphNode, parent: AStarChoice): AStarChoice
   {
     return  {fScore: gScore + hScore, gScore: gScore, hScore: hScore, node: node, parent: parent, edge: undefined};
   }
 
+  /**
+   * Find a choice in a specific set
+   * @param set the set you want to check
+   * @param node the node you want to find
+   * @private
+   */
   private static FindChoice(set: AStarChoice[], node: GraphNode): AStarChoice
   {
     for (const choice of set)
@@ -74,6 +102,11 @@ export class AStarService
     return undefined;
   }
 
+  /**
+   * Loop trough parents to get the path in edges
+   * @param checkedNodes the last node
+   * @private
+   */
   private static GeneratePath(checkedNodes: AStarChoice)
   {
     const path: Edge[] = [];

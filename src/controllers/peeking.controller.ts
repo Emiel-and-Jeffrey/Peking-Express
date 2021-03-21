@@ -1,10 +1,11 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Post } from "@nestjs/common";
 import { PeekingService } from "services/peeking.service";
 import { Schemas } from "constants/schemas";
-import { IMapRequest } from "../interfaces";
+import { Edge, GraphNode, IMapRequest } from "../interfaces";
 import { GameMap } from "../classes/game-map.class";
+import { IGameTest } from "../interfaces/game-test";
 
-@Controller(Schemas.exampleSchema)
+@Controller(Schemas.pekingSchema)
 export class PeekingController
 {
     constructor(private readonly service: PeekingService) { }
@@ -31,9 +32,15 @@ export class PeekingController
     }
 
     @Get("/nextMove/:target")
-    public nextMove(@Param("target", ParseIntPipe) target: number): number
+    public nextMove(@Param("target", ParseIntPipe) target: number): Edge
     {
         const node = this.service.NextMove(target);
-        return node === undefined ? -1 : node.ID;
+        return node === undefined ? {weight: -1, startNode: undefined, endNode: undefined} : node;
+    }
+
+    @Post("/testGame")
+    public testGame(@Body() game: IGameTest): Edge[]
+    {
+        return this.service.TestGame(game);
     }
 }

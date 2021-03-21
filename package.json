@@ -1,5 +1,5 @@
 {
-    "name": "Peking express",
+    "name": "Peking-express",
     "version": "0.0.1",
     "description": "Peking express",
     "author": "Jeffrey van den Elshout and Emiel van den Brink",
@@ -25,6 +25,8 @@
         "@nestjs/swagger": "^4.6.0",
         "@vrees/authentication": "^1.1.13",
         "@vrees/database-essentials": "^1.0.4",
+        "class-transformer": "^0.4.0",
+        "class-validator": "^0.13.1",
         "dotenv-safe": "^8.2.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^5.11.18",

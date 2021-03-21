@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { AStarService } from "./a-star.service";
 import { Edge, GraphNode, IMapRequest } from "../interfaces";
 import { GameMap } from "../classes/game-map.class";
+import { IGameTest } from "../interfaces/game-test";
 
 @Injectable()
 export class PeekingService
@@ -53,7 +54,7 @@ export class PeekingService
      * Get the next move for the player character
      * @param target the target node
      */
-    public NextMove(target: number): GraphNode
+    public NextMove(target: number): Edge
     {
         if (this.map.GetPlayer() === undefined)
             return undefined;
@@ -62,12 +63,33 @@ export class PeekingService
 
         if (edges.length <= 0)
         {
-            return this.map.GetPlayer().currentNode;
+            return undefined;
         }
 
-        const move = edges.pop();
+        const move = edges.shift();
         this.budget -= move.weight;
         this.map.GetPlayer().currentNode = move.endNode;
-        return move.endNode;
+        return move;
+    }
+
+    /**
+     * Run a test game
+     * @param game the test game
+     */
+    public TestGame(game: IGameTest): Edge[]
+    {
+        this.InitializeMap(game.map, game.budget);
+        this.SetStartLocation(-1, game.startLocation);
+        const path: Edge[] = [];
+        for (const values of game.players)
+        {
+            path.push(this.NextMove(88));
+            if (this.map.GetPlayer().currentNode.ID === 88)
+            {
+                break;
+            }
+            this.map.SetGroupPositions(values);
+        }
+        return path;
     }
 }

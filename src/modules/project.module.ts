@@ -1,14 +1,11 @@
-import { MiddlewareConsumer, Module, HttpModule, RequestMethod } from "@nestjs/common";
-import { MongooseModule } from "@nestjs/mongoose";
+import { MiddlewareConsumer, Module, HttpModule } from "@nestjs/common";
 import { PeekingController } from "controllers/peeking.controller";
 import { PeekingService } from "services/peeking.service";
-//  import { ExampleSchema } from "schemas/example.schema";
-import { Schemas } from "constants/schemas";
 import { HttpExceptionFilter } from "filters/exception.filter";
 import { APP_FILTER } from "@nestjs/core";
 import { MongoExceptionFilter } from "filters/mongoDB.filter";
 import { ValidationFilter } from "filters/validation.filter";
-import { AuthenticationMiddleware } from "middleware/authentication.middleware";
+import { AStarService } from "../services/a-star.service";
 
 @Module({
     imports: [
@@ -33,6 +30,11 @@ import { AuthenticationMiddleware } from "middleware/authentication.middleware";
             provide: APP_FILTER,
             useClass: ValidationFilter,
         },
+        AStarService,
+        {
+            provide: APP_FILTER,
+            useClass: HttpExceptionFilter,
+        },
     ],
 })
 
@@ -42,9 +44,5 @@ export class ProjectModule
 
     configure(consumer: MiddlewareConsumer)
     {
-        /* Fill middleware here */
-        consumer.apply(AuthenticationMiddleware).forRoutes({
-            path: "*", method: RequestMethod.ALL
-        });
     }
 }

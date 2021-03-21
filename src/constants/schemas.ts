@@ -1,3 +1,3 @@
 export const Schemas = {
-  exampleSchema: "Example",
+  pekingSchema: "Peking",
 };

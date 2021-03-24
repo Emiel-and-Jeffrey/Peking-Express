@@ -39,8 +39,20 @@ export class PeekingController
     }
 
     @Post("/testGame")
-    public testGame(@Body() game: IGameTest): Edge[]
+    public testGame(@Body() game: IGameTest): number[]
     {
-        return this.service.TestGame(game);
+        const edges: Edge[] = this.service.TestGame(game);
+
+        if (edges === [])
+            return [];
+
+        let edge = edges.shift();
+        const route: number[] =  [edge.startNode.ID];
+        while (edge !== undefined)
+        {
+            route.push(edge.endNode.ID);
+            edge = edges.shift();
+        }
+        return route;
     }
 }

@@ -30,7 +30,6 @@ export class AStarService
 
     const graph = map.GetGraph();
     const openSet: AStarChoice[] = [AStarService.CreateAStarChoice(0, 0, startNode, undefined)];
-    const closedSet: GraphNode[] = [];
 
     while (openSet.length > 0)
     {
@@ -40,31 +39,36 @@ export class AStarService
       {
           return AStarService.GeneratePath(choice);
       }
-      closedSet.push(choice.node);
 
       for (const edge of graph.GetEdges(choice.node.ID))
       {
-          if ((edge.endNode.isCritical === true && map.IsGroupOnNode(edge.endNode)) || closedSet.includes(edge.endNode))
+          if ((edge.endNode.isCritical === true && map.IsGroupOnNode(edge.endNode)))
           {
             continue;
           }
 
           let neighbor = AStarService.FindChoice(openSet, edge.endNode);
+          let addToOpenSet = false;
           if (neighbor === undefined)
           {
             neighbor =  AStarService.CreateAStarChoice(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER, edge.endNode, undefined);
-            openSet.push(neighbor);
+            addToOpenSet = true;
           }
 
           const neighborScore = edge.weight + choice.fScore;
           if (neighbor.fScore > edge.weight + choice.fScore && neighborScore < budget)
           {
             neighbor.gScore = neighborScore;
-            neighbor.hScore = 0;
+            neighbor.hScore =  choice.hScore + 1;
             neighbor.fScore = edge.weight + choice.hScore;
             neighbor.node = edge.endNode;
             neighbor.parent = choice;
             neighbor.edge = edge;
+
+            if (addToOpenSet)
+            {
+              openSet.push(neighbor);
+            }
           }
 
       }
